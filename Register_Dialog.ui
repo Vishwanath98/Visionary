@@ -208,7 +208,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Age</string>
+    <string>Gender</string>
    </property>
   </widget>
   <widget class="QRadioButton" name="radioButton">
