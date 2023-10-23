@@ -1,59 +1,47 @@
 #!/usr/bin/env python
 # coding: utf-8
+import sys
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialog, QApplication
+from PyQt5.uic import loadUi
 
-# In[1]:
-
-
-from PyQt5 import uic
-from PyQt5.QtGui import QWindow
-from RegisterDialog import RegisterDialog
-
-
-# In[ ]:
-
-
-class LoginDialog(QWindow):
-    """
-    The main application window.
-    """
-    
+class Login(QDialog):
     def __init__(self):
-     
-        """
-        Load the UI and initialize its components.
-        """
-        super().__init__()
-        self.ui = uic.loadUi('Login_Dialog.ui')
-        self.ui.show();
+        super(Login,self).__init__()
+        loadUi("login.ui",self)
+        self.login_button.clicked.connect(self.loginfunction)
+        self.register_here_button.clicked.connect(self.create)
+    def loginfunction(self):
+        user_name=self.user_name.text()
+        password=self.l_password.text()
+        print("Successfully logged in with username: ",user_name, "and password",password) 
+    def create(self):
+        register = Register()
+        widget.addWidget(register)
+        widget.setCurrentIndex(widget.currentIndex()+1)
         
-        self._Register_Dialog = RegisterDialog()
-        
-        #self.ui.pushButton.clicked.connect(self.on_Lbutton_click)
-        
-        self.ui.pushButton_2.clicked.connect(self.on_Rbutton_click)
-        
+class Register(QDialog):
+    def __init__(self):
+        super(Register,self).__init__()
+        loadUi("register.ui",self)
+        self.register_button.clicked.connect(self.registerfunction)
+    def registerfunction(self):
+        first_name = self.first_name.text()
+        last_name = self.last_name.text()
+        user_name = self.user_name.text()
+        if self.password.text() == self.confirm_pass.text():
+            print("password is correct")
+                    
+app = QApplication(sys.argv)
+mainwindow = Login()
+widget = QtWidgets.QStackedWidget()
+widget.addWidget(mainwindow)
+widget.setFixedWidth(480)
+widget.setFixedHeight(620)
+widget.show()
+app.exec()
 
 
-# In[ ]:
-
-
-    def show_dialog(self):
-        self.ui.show()
-        
-    def on_Rbutton_click(self):
-        self.ui=uic.loadUi('Register_Dialog.ui')
-        self.ui.show()
-        #self._Register_Dialog.show_dialog()
-    
-    """def on_Lbutton_click(self):
-        self._Register_Dialog.show_dialog()"""
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    form = RegistertDialog()
-    form.show_dialog()
-    sys.exit(app.exec_())
-# In[ ]:
 
 
 
