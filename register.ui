@@ -250,6 +250,19 @@
     <string>Register</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="show_button">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>490</y>
+     <width>121</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Check Your Details</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
