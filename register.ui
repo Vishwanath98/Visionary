@@ -263,6 +263,19 @@
     <string>Check Your Details</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="back_button">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>440</y>
+     <width>93</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Back to login</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
