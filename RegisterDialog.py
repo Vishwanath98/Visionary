@@ -3,7 +3,6 @@
 
 # In[1]:
 
-
 import sys
 from PyQt5 import QtWidgets,uic
 from PyQt5.QtWidgets import QDialog, QApplication,QTableWidgetItem
@@ -41,13 +40,23 @@ class Register(QDialog):
         conn = make_connection(config_file = 'hosp.ini')
         cursor = conn.cursor()
         
-        sql="""INSERT INTO register VALUES""" f" ('{first_name}', '{last_name}','{gender}', '{user_name}', '{pwd}')"
+        sql_1="""SELECT user_name FROM register WHERE user_name =""" f"('{user_name}')"
+        cursor.execute(sql_1)
+        result = cursor.fetchone()
         
-        cursor.execute(sql)
-        conn.commit()
+        if result[0] == user_name:
+            print("User name already exists")
+        else:
+            conn = make_connection(config_file = 'hosp.ini')
+            cursor = conn.cursor()
+            sql_2="""INSERT INTO register VALUES""" f" ('{first_name}', '{last_name}','{gender}', '{user_name}', '{pwd}')"
+            cursor.execute(sql_2)
+            conn.commit()
+        #cursor.execute(sql)
+        #conn.commit()
               
-        cursor.close()
-        conn.close()
+        #cursor.close()
+        #conn.close()
         
     #def open_details(self):
         #user_details = User_Details()
