@@ -40,16 +40,16 @@ class Register(QDialog):
         conn = make_connection(config_file = 'hosp.ini')
         cursor = conn.cursor()
         
-        sql_1="""SELECT user_name FROM register WHERE user_name =""" f"('{user_name}')"
+        sql_1 = """SELECT user_name FROM register WHERE user_name =""" f"('{user_name}')"
         cursor.execute(sql_1)
         result = cursor.fetchone()
         
-        if result[0] == user_name:
+        if result == user_name:
             print("User name already exists")
         else:
             conn = make_connection(config_file = 'hosp.ini')
             cursor = conn.cursor()
-            sql_2="""INSERT INTO register VALUES""" f" ('{first_name}', '{last_name}','{gender}', '{user_name}', '{pwd}')"
+            sql_2 = """INSERT INTO register VALUES""" f" ('{first_name}', '{last_name}','{gender}', '{user_name}', '{pwd}')"
             cursor.execute(sql_2)
             conn.commit()
         #cursor.execute(sql)

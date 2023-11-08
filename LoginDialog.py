@@ -7,13 +7,13 @@ from PyQt5.uic import loadUi
 from DATA225utils import make_connection
 from RegisterDialog import *
 from User_Details import *
+from Patient_home_page import *
 
 class Login(QDialog):
     def __init__(self):
         super(Login,self).__init__()
         self.ui = uic.loadUi("login.ui",self)
         self.setWindowTitle("Login")
-        #self.agree_box()
         self.l_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.login_button.clicked.connect(self.loginfunction)
         #self.register_here_button.clicked.connect(self.create)
@@ -33,6 +33,7 @@ class Login(QDialog):
                 result_pass = cursor.fetchone()
                 if result_pass[0] == password:
                     print("Login Successful")
+                    MainWindow.goto_patient_home()
                 else:
                     print("Invalid user name or password")
         else:
@@ -149,18 +150,19 @@ class User_Details(QDialog):
 
             row_index += 1
                     
- """               
-
+ """
 class MainWindow(QtWidgets.QStackedWidget):
     def __init__(self):
         super().__init__()
         self.login_screen = Login()
         self.register_screen = Register()
         self.user_details_screen = User_Details()
+        self.patient_home_screen = Patient_Home()
 
         self.addWidget(self.login_screen)
         self.addWidget(self.register_screen)
         self.addWidget(self.user_details_screen)
+        self.addWidget(self.patient_home_screen)
 
         self.setFixedWidth(580)
         self.setFixedHeight(620)
@@ -168,6 +170,7 @@ class MainWindow(QtWidgets.QStackedWidget):
         self.login_screen.register_here_button.clicked.connect(self.goto_register)
         self.register_screen.back_button.clicked.connect(self.goto_login)
         self.register_screen.show_button.clicked.connect(self.goto_details)
+        #self.login_screen.login_button.clicked.connect(self.goto_patient_home)
 
     def goto_register(self):
         self.setCurrentIndex(self.indexOf(self.register_screen))
@@ -177,20 +180,9 @@ class MainWindow(QtWidgets.QStackedWidget):
         
     def goto_details(self):
         self.setCurrentIndex(self.indexOf(self.user_details_screen))
-"""        
-def main():
-    app = QApplication(sys.argv)
-    widget = MainWindow()
-    widget.show()
-    try:
-        app.exec_()
-        #sys.exit(app_exec())
-    except:
-        print("Exiting gracefully")
-if __name__=='__main__':
-    app = QApplication(sys.argv)
-    main()
-"""
+    def goto_patient_home(self):
+        self.setCurrentIndex(self.indexOf(self.patient_home_screen))
+
 app = QApplication(sys.argv)
 widget = MainWindow()
 #mainwindow = Login()
@@ -200,6 +192,7 @@ widget = MainWindow()
 #widget.setFixedHeight(620)
 widget.show()
 app.exec()
+
 
 
 
