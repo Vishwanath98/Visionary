@@ -31,9 +31,12 @@ class Login(QDialog):
                 sql = 'SELECT pwd from register WHERE user_name = \''+user_name+"\'"
                 cursor.execute(sql)
                 result_pass = cursor.fetchone()
+                print(result_pass)
+
                 if result_pass[0] == password:
                     print("Login Successful")
-                    MainWindow.goto_patient_home()
+                    MainWindow.login_screen.login_button.clicked.connect(MainWindow.goto_patient_home)
+                    #MainWindow.goto_patient_home()
                 else:
                     print("Invalid user name or password")
         else:
