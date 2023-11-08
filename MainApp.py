@@ -11,6 +11,7 @@ from RegisterDialog import *
 from User_Details import *
 from Patient_home_page import *
 
+"""
 class MainWindow(QtWidgets.QStackedWidget):
     def __init__(self):
         super().__init__()
@@ -52,3 +53,4 @@ widget = MainWindow()
 #widget.setFixedHeight(620)
 widget.show()
 app.exec()
+"""
