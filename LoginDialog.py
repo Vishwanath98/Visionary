@@ -48,6 +48,21 @@ class Login(QDialog):
         widget.addWidget(patient_home)
         widget.setCurrentIndex(widget.currentIndex()+3)
         patient_home.u_name.setText(user_name)
+        self.login_log(user_name)
+    def login_log(self,user_name):
+        from datetime import datetime
+
+        conn = make_connection(config_file='hosp.ini')
+        cursor = conn.cursor()
+
+        currtime = datetime.now()
+
+        sql_2 = """INSERT INTO login_log (username, login_time) VALUES""" f"('{user_name}', '{currtime}')"
+
+        cursor.execute(sql_2)
+        conn.commit()
+        cursor.close()
+        conn.close()
 
 """        
 class Register(QDialog):
