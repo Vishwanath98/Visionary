@@ -7,3 +7,4 @@ class Patient_Home(QDialog):
         super(Patient_Home,self).__init__()
         self.ui = uic.loadUi("Patient_home_page.ui",self)
         self.setWindowTitle("Patient Home Page")
+        self.u_name.setText("sandeep")

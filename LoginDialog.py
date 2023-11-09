@@ -1,52 +1,54 @@
 #!/usr/bin/env python
 # coding: utf-8
 import sys
-from PyQt5 import QtWidgets,uic
-from PyQt5.QtWidgets import QDialog, QApplication,QTableWidgetItem
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QDialog, QApplication, QTableWidgetItem, QStackedWidget
 from PyQt5.uic import loadUi
 from DATA225utils import make_connection
 from RegisterDialog import *
 from User_Details import *
 from Patient_home_page import *
 
+
 class Login(QDialog):
     def __init__(self):
-        super(Login,self).__init__()
-        self.ui = uic.loadUi("login.ui",self)
+        super(Login, self).__init__()
+        self.ui = uic.loadUi("login.ui", self)
         self.setWindowTitle("Login")
         self.l_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.login_button.clicked.connect(self.loginfunction)
         #self.register_here_button.clicked.connect(self.create)
-        
+
     def loginfunction(self):
-        if self.checkBox.isChecked()==True:
-            user_name=self.user_name.text()
-            #self.l_password.setEchoMode(QtWidgets.QLineEdit.Password)
-            password=self.l_password.text()
+        if self.checkBox.isChecked():
+            user_name = self.user_name.text()
+            # self.l_password.setEchoMode(QtWidgets.QLineEdit.Password)
+            password = self.l_password.text()
             if len(user_name) == 0 or len(password) == 0:
                 print("Please input all fields")
             else:
-                conn = make_connection(config_file = 'hosp.ini')
+                conn = make_connection(config_file='hosp.ini')
                 cursor = conn.cursor()
-                sql = 'SELECT pwd from register WHERE user_name = \''+user_name+"\'"
+                sql = 'SELECT pwd from register WHERE user_name = \'' + user_name + "\'"
                 cursor.execute(sql)
                 result_pass = cursor.fetchone()
                 print(result_pass)
 
                 if result_pass[0] == password:
                     print("Login Successful")
-                    MainWindow.login_screen.login_button.clicked.connect(MainWindow.goto_patient_home)
-                    #MainWindow.goto_patient_home()
+                    self.create(user_name)
                 else:
                     print("Invalid user name or password")
         else:
             print("agree to the terms")
-        #print("Successfully logged in with username: ",user_name, "and password",password) 
-        
-    #def create(self):
-        #register = Register()
-        #widget.addWidget(register)
-        #widget.setCurrentIndex(widget.currentIndex()+1)
+        # print("Successfully logged in with username: ",user_name, "and password",password)
+
+    def create(self,user_name):
+        patient_home = Patient_Home()
+        widget.addWidget(patient_home)
+        widget.setCurrentIndex(widget.currentIndex()+3)
+        patient_home.u_name.setText(user_name)
+
 """        
 class Register(QDialog):
     def __init__(self):
@@ -154,18 +156,20 @@ class User_Details(QDialog):
             row_index += 1
                     
  """
+
+
 class MainWindow(QtWidgets.QStackedWidget):
     def __init__(self):
         super().__init__()
         self.login_screen = Login()
         self.register_screen = Register()
         self.user_details_screen = User_Details()
-        self.patient_home_screen = Patient_Home()
+        #self.patient_home_screen = Patient_Home()
 
         self.addWidget(self.login_screen)
         self.addWidget(self.register_screen)
         self.addWidget(self.user_details_screen)
-        self.addWidget(self.patient_home_screen)
+        #self.addWidget(self.patient_home_screen)
 
         self.setFixedWidth(580)
         self.setFixedHeight(620)
@@ -173,33 +177,36 @@ class MainWindow(QtWidgets.QStackedWidget):
         self.login_screen.register_here_button.clicked.connect(self.goto_register)
         self.register_screen.back_button.clicked.connect(self.goto_login)
         self.register_screen.show_button.clicked.connect(self.goto_details)
-        #self.login_screen.login_button.clicked.connect(self.goto_patient_home)
+        # self.login_screen.login_button.clicked.connect(self.login_screen.loginfunction())
 
     def goto_register(self):
         self.setCurrentIndex(self.indexOf(self.register_screen))
+        self.register_screen.first_name.clear()
+        self.register_screen.last_name.clear()
+        self.register_screen.user_name.clear()
+        self.register_screen.email.clear()
+        self.register_screen.password.clear()
+        self.register_screen.confirm_pass.clear()
+        #self.register_screen.radioButton.setChecked(False)
+
+
 
     def goto_login(self):
         self.setCurrentIndex(self.indexOf(self.login_screen))
-        
+
     def goto_details(self):
         self.setCurrentIndex(self.indexOf(self.user_details_screen))
+
     def goto_patient_home(self):
         self.setCurrentIndex(self.indexOf(self.patient_home_screen))
 
+
 app = QApplication(sys.argv)
 widget = MainWindow()
-#mainwindow = Login()
-#widget = QtWidgets.QStackedWidget()
-#widget.addWidget(mainwindow)
-#widget.setFixedWidth(580)
-#widget.setFixedHeight(620)
+# mainwindow = Login()
+# widget = QtWidgets.QStackedWidget()
+# widget.addWidget(mainwindow)
+# widget.setFixedWidth(580)
+# widget.setFixedHeight(620)
 widget.show()
 app.exec()
-
-
-
-
-
-
-
-

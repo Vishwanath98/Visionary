@@ -24,7 +24,6 @@ class Register(QDialog):
         #self.back_button.clicked.connect(self.open_login)
         
     def registerfunction(self):
-        
         first_name = self.first_name.text()
         last_name = self.last_name.text()
         email = self.email.text()
@@ -44,11 +43,11 @@ class Register(QDialog):
         sql_1 = """SELECT user_name FROM register WHERE user_name =""" f"('{user_name}')"
         cursor.execute(sql_1)
         result = cursor.fetchone()
-        cursor.close()
-        conn.close()
+        #cursor.close()
+        #conn.close()
         print(result)
         
-        if result[0] == user_name:
+        if result == user_name:
             print("User name already exists")
         else:
             conn = make_connection(config_file = 'hosp.ini')
