@@ -43,10 +43,19 @@
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>55</y>
-     <width>61</width>
+     <y>60</y>
+     <width>91</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>31</height>
+    </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 22pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>Hello</string>
@@ -55,14 +64,17 @@
   <widget class="QLabel" name="u_name">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>60</y>
-     <width>55</width>
-     <height>16</height>
+     <x>200</x>
+     <y>50</y>
+     <width>91</width>
+     <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">font: 75 24pt &quot;MS Shell Dlg 2&quot;;</string>
+   </property>
    <property name="text">
-    <string/>
+    <string>Ron</string>
    </property>
   </widget>
  </widget>
