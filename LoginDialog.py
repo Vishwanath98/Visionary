@@ -48,6 +48,7 @@ class Login(QDialog):
         widget.addWidget(patient_home)
         widget.setCurrentIndex(widget.currentIndex()+3)
         patient_home.u_name.setText(user_name)
+        patient_home.profile(user_name)
         self.login_log(user_name)
     def login_log(self,user_name):
         from datetime import datetime

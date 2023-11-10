@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="appointment_button">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>120</y>
+     <x>160</x>
+     <y>130</y>
      <width>211</width>
      <height>28</height>
     </rect>
@@ -29,8 +29,8 @@
   <widget class="QPushButton" name="manage_appointments_button">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>160</y>
+     <x>160</x>
+     <y>200</y>
      <width>211</width>
      <height>28</height>
     </rect>
@@ -42,7 +42,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>160</x>
      <y>60</y>
      <width>91</width>
      <height>31</height>
@@ -64,9 +64,9 @@
   <widget class="QLabel" name="u_name">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>260</x>
      <y>50</y>
-     <width>91</width>
+     <width>261</width>
      <height>51</height>
     </rect>
    </property>
@@ -75,6 +75,25 @@
    </property>
    <property name="text">
     <string>Ron</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="profile_pic">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>40</y>
+     <width>81</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>profile_pic_male.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
