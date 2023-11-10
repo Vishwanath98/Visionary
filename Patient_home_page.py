@@ -26,7 +26,7 @@ class Patient_Home(QDialog):
             print("last")
         else:
             label = self.profile_pic
-            pixmap = QPixmap('profile_pic_female.png.png')
+            pixmap = QPixmap('profile_pic_female.png')
             label.setPixmap(pixmap)
             #self.setCentralWidget(label)
             self.resize(pixmap.width(), pixmap.height())
