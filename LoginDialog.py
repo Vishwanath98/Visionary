@@ -180,12 +180,12 @@ class MainWindow(QtWidgets.QStackedWidget):
         self.login_screen = Login()
         self.register_screen = Register()
         self.user_details_screen = User_Details()
-        #self.patient_home_screen = Patient_Home()
+        self.patient_home_screen = Patient_Home()
 
         self.addWidget(self.login_screen)
         self.addWidget(self.register_screen)
         self.addWidget(self.user_details_screen)
-        #self.addWidget(self.patient_home_screen)
+        self.addWidget(self.patient_home_screen)
 
         self.setFixedWidth(580)
         self.setFixedHeight(620)
@@ -193,7 +193,7 @@ class MainWindow(QtWidgets.QStackedWidget):
         self.login_screen.register_here_button.clicked.connect(self.goto_register)
         self.register_screen.back_button.clicked.connect(self.goto_login)
         self.register_screen.show_button.clicked.connect(self.goto_details)
-        # self.login_screen.login_button.clicked.connect(self.login_screen.loginfunction())
+        self.patient_home_screen.logout_button.clicked.connect(self.goto_login)
 
     def goto_register(self):
         self.setCurrentIndex(self.indexOf(self.register_screen))
@@ -209,6 +209,8 @@ class MainWindow(QtWidgets.QStackedWidget):
 
     def goto_login(self):
         self.setCurrentIndex(self.indexOf(self.login_screen))
+        self.login_screen.user_name.clear()
+        self.login_screen.l_password.clear()
 
     def goto_details(self):
         self.setCurrentIndex(self.indexOf(self.user_details_screen))

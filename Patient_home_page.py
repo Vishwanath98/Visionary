@@ -3,6 +3,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.uic import loadUi
 from DATA225utils import make_connection
 from LoginDialog import *
+
+
 class Patient_Home(QDialog):
     def __init__(self):
         super(Patient_Home,self).__init__()
@@ -23,14 +25,12 @@ class Patient_Home(QDialog):
             label.setPixmap(pixmap)
             #self.setCentralWidget(label)
             self.resize(pixmap.width(),pixmap.height())
-            print("last")
         else:
             label = self.profile_pic
             pixmap = QPixmap('profile_pic_female.png')
             label.setPixmap(pixmap)
             #self.setCentralWidget(label)
             self.resize(pixmap.width(), pixmap.height())
-            print("female")
 
 
 
