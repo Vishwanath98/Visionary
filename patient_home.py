@@ -1,16 +1,17 @@
-from PyQt5.QtWidgets import QDialog
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
-from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QDialog
+
 from DATA225utils import make_connection
-from LoginDialog import *
+from login import LoginWindow
 
+class PatientHomePage(QDialog):
+    def __init__(self, parent=None):
+        super(PatientHomePage, self).__init__(parent)
+        uic.loadUi("patient_home_page.ui", self)
 
-class Patient_Home(QDialog):
-    def __init__(self):
-        super(Patient_Home,self).__init__()
-        self.ui = uic.loadUi("Patient_home_page.ui",self)
-        self.setWindowTitle("Patient Home Page")
     def profile(self,user_name):
+        print("entered")
         conn = make_connection(config_file='hosp.ini')
         cursor = conn.cursor()
         #user_name = self.u_name.text()
@@ -31,6 +32,3 @@ class Patient_Home(QDialog):
             label.setPixmap(pixmap)
             #self.setCentralWidget(label)
             self.resize(pixmap.width(), pixmap.height())
-
-
-
