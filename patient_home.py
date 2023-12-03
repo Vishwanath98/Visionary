@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog
+from PyQt5.uic.properties import QtCore
 
 from DATA225utils import make_connection
 from login import LoginWindow

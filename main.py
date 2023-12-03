@@ -2,8 +2,13 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QStackedWidget, QPushButton
 
 from appointments import Appointment
+from graph import AppDemo
+from hosp_past_appointments import Hosp_Past_Appointments
+from hospital_appointments import Hospital_Appointments
+from hospital_home import Hospital_Home
 from login import LoginWindow
 from manage_appointments import AppointmentManager
+from patient_dashboard import Patient_Dashboard
 from register import RegistrationWindow
 from patient_home import PatientHomePage
 from welcome_page import Welcome_Page
@@ -31,6 +36,24 @@ class MainWindow(QMainWindow):
 
         self.hospital_window = Hospital_Login()
         self.stacked_widget.addWidget(self.hospital_window)
+        self.hospital_window.login_button.clicked.connect(self.show_hospital_home)
+
+        self.hospital_home = Hospital_Home()
+        self.stacked_widget.addWidget(self.hospital_home)
+        self.hospital_home.new_appointments.clicked.connect(self.show_hospital_appointments)
+        self.hospital_home.pushButton_3.clicked.connect(self.show_analytics)
+        self.hospital_home.past_appointments.clicked.connect(self.show_past_appointments)
+
+        self.hospital_appointments = Hospital_Appointments()
+        self.stacked_widget.addWidget(self.hospital_appointments)
+        self.hospital_appointments.back_button.clicked.connect(self.show_hospital_home)
+
+        self.patient_dashboard = Patient_Dashboard()
+        self.stacked_widget.addWidget(self.patient_dashboard)
+        #self.patient_dashboard.pushButton_2.clicked.connect()
+
+        self.graph = AppDemo()
+        self.stacked_widget.addWidget(self.graph)
 
 
         self.registration_window = RegistrationWindow()
@@ -41,12 +64,17 @@ class MainWindow(QMainWindow):
         self.patient_home = PatientHomePage()
         self.stacked_widget.addWidget(self.patient_home)
         self.patient_home.logout_button.clicked.connect(self.show_login)
+        self.patient_home.my_health_button.clicked.connect(self.show_dashboard)
 
         self.appointment = Appointment()
         self.stacked_widget.addWidget(self.appointment)
         self.patient_home.appointment_button.clicked.connect(self.make_appointment)
         #self.patient_home.manage_appointments_button.connect(self.manage_appointment)
-        #self.appointment.back_button.clicked.connect(self.handle_login_successful)
+        #self.appointment.back_button.clicked.connect(self.show_patient_home(t_user_name))
+
+        self.past_appointments = Hosp_Past_Appointments()
+        self.stacked_widget.addWidget(self.past_appointments)
+        self.past_appointments.back_button.clicked.connect(self.show_hospital_home)
 
         self.manage = AppointmentManager()
         self.stacked_widget.addWidget(self.manage)
@@ -82,6 +110,18 @@ class MainWindow(QMainWindow):
     def show_hosp_login(self):
         self.stacked_widget.setCurrentWidget(self.hospital_window)
 
+    def show_hospital_home(self):
+        self.stacked_widget.setCurrentWidget(self.hospital_home)
+
+    def show_hospital_appointments(self):
+        self.stacked_widget.setCurrentWidget(self.hospital_appointments)
+
+    def show_past_appointments(self):
+        self.stacked_widget.setCurrentWidget(self.past_appointments)
+
+    def show_analytics(self):
+        self.stacked_widget.setCurrentWidget(self.graph)
+
     def show_registration(self):
         self.stacked_widget.setCurrentWidget(self.registration_window)
         self.registration_window.first_name.clear()
@@ -98,15 +138,20 @@ class MainWindow(QMainWindow):
         self.patient_home.u_name.setText(user_name)
         self.patient_home.profile(user_name)
 
-    def make_appointment(self):
+
+    def make_appointment(self,user_name):
         self.stacked_widget.setCurrentWidget(self.appointment)
 
     def manage_appointment(self):
         #print("manage")
         self.stacked_widget.setCurrentWidget(self.manage)
 
+    def show_dashboard(self):
+        self.stacked_widget.setCurrentWidget(self.patient_dashboard)
+
     def handle_login_successful(self,user_name):
         self.show_patient_home(user_name)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

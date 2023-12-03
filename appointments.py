@@ -3,14 +3,17 @@ import mysql.connector
 from PyQt5.QtCore import QDateTime
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QListWidget, QLabel, QComboBox, QDateEdit, QPushButton, \
     QDialog, QDateTimeEdit, QHBoxLayout
-
 from DATA225utils import make_connection
-
 
 class Appointment(QDialog):
     def __init__(self):
         super(Appointment, self).__init__()
 
+        self.search_button = None
+        self.doctor_list = None
+        self.date_filter = None
+        self.cost_combo = None
+        self.disease_combo = None
         self.init_ui()
 
     def init_ui(self):
@@ -50,20 +53,16 @@ class Appointment(QDialog):
         self.add_doctor_buttons()
 
         # Search Button
-        search_button = QPushButton("Search")
-        search_button.clicked.connect(self.get_filtered_doctors)
-        layout.addWidget(search_button)
+        self.search_button = QPushButton("Search")
+        self.search_button.clicked.connect(self.get_filtered_doctors)
+        layout.addWidget(self.search_button)
 
         back_button = QPushButton("Back to Home Page")
-        #back_button.clicked.connect(self.close_dialog)
         layout.addWidget(back_button)
 
         self.setLayout(layout)
         self.setWindowTitle("Appointments Tab")
         self.show()
-
-    def close_dialog(self):
-        self.accept()
 
     def add_doctor_buttons(self):
         for doctor in self.get_filtered_doctors("All", "All", QDateTime.currentDateTime()):
@@ -71,6 +70,7 @@ class Appointment(QDialog):
 
             # Add doctor name to the layout
             doctor_label = QLabel(doctor)
+            #rating_label = QLabel(rating)
             button_layout.addWidget(doctor_label)
 
             # Add "Book Appointment" button
@@ -86,6 +86,8 @@ class Appointment(QDialog):
 
     def book_appointment(self, doctor_name):
         # Add your logic here for booking an appointment with the selected doctor
+        #create appointment Id function to create appointment id's for every new appointment ID
+        #insert into appointments with
         print(f"Booking appointment with {doctor_name}")
 
     def get_filtered_doctors(self, disease, cost, selected_date):
@@ -93,6 +95,7 @@ class Appointment(QDialog):
             connection = make_connection(config_file='hosp.ini')
             cursor = connection.cursor()
 
+            #rating specialization, fee
             query = "SELECT Doctor_Name FROM doctors WHERE "
             conditions = []
 
@@ -134,8 +137,5 @@ class Appointment(QDialog):
         # Add the filtered doctors to the list widget
         self.doctor_list.addItems(doctors_to_display)
 
-    def go_to_patient_home(self):
-        print("hello")
-        self.stacked_widget.setCurrentIndex(0)
 
 

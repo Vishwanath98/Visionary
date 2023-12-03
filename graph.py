@@ -121,7 +121,9 @@ class AppDemo(QDialog): #QWidget for Widget based
         app_demo.show()
         """
 
+"""
 app=QApplication(sys.argv)
 demo=AppDemo()
 demo.show()
 sys.exit(app.exec_())
+"""
