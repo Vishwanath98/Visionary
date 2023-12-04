@@ -16,11 +16,9 @@ class PatientHomePage(QDialog):
         conn = make_connection(config_file='hosp.ini')
         cursor = conn.cursor()
         #user_name = self.u_name.text()
-        print(user_name)
         sql = 'SELECT gender FROM register WHERE user_name = \'' + user_name + "\'"
         cursor.execute(sql)
         result = cursor.fetchone()
-        print(result)
         if result[0] == 'Male':
             label = self.profile_pic
             pixmap = QPixmap('profile_pic_male.png')

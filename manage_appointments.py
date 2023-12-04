@@ -7,6 +7,7 @@ class AppointmentManager(QDialog):
     def __init__(self):
         super(AppointmentManager, self).__init__()
 
+        self.back_button = None
         self.init_ui()
         self.load_appointments()  # Load appointments when the window is initialized
 
@@ -34,6 +35,9 @@ class AppointmentManager(QDialog):
         view_bills_button = QPushButton("View Bills")
         view_bills_button.clicked.connect(self.view_bills)
         layout.addWidget(view_bills_button)
+
+        self.back_button = QPushButton("Back to Home Page")
+        layout.addWidget(self.back_button)
 
         self.setLayout(layout)
         self.setWindowTitle("Appointment Manager")
