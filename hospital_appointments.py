@@ -37,6 +37,13 @@ class Hospital_Appointments(QDialog):
             msg_box.exec_()
 
             if msg_box.clickedButton() == accept_button:
+                if selected_item is not None:
+                    # Remove the selected item from the QListWidget
+                    self.appointments_list.takeItem(self.appointments_list.row(selected_item))
                 print(f"Accepted appointment: {appointment_text}")
             elif msg_box.clickedButton() == decline_button:
+                #self.appointment_list.removeItem(selected_item)
+                if selected_item is not None:
+                    # Remove the selected item from the QListWidget
+                    self.appointments_list.takeItem(self.appointments_list.row(selected_item))
                 print(f"Declined appointment: {appointment_text}")

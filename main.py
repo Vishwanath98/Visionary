@@ -78,7 +78,7 @@ class MainWindow(QMainWindow):
         self.stacked_widget.addWidget(self.appointment)
         self.patient_home.appointment_button.clicked.connect(self.make_appointment)
         #self.patient_home.manage_appointments_button.connect(self.manage_appointment)
-        self.appointment.back_button.clicked.connect(self.back_function)
+        self.appointment.pushButton_2.clicked.connect(self.back_function)
 
         self.past_appointments = Hosp_Past_Appointments()
         self.stacked_widget.addWidget(self.past_appointments)

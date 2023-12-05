@@ -20,9 +20,9 @@ class AppointmentManager(QDialog):
         layout.addWidget(self.appointment_list)
 
         # Buttons to manage appointments
-        view_button = QPushButton("View Appointment")
-        view_button.clicked.connect(self.view_appointment)
-        layout.addWidget(view_button)
+        #view_button = QPushButton("View Appointment")
+        #view_button.clicked.connect(self.view_appointment)
+        #layout.addWidget(view_button)
 
         edit_button = QPushButton("Edit Appointment")
         edit_button.clicked.connect(self.edit_appointment)
@@ -32,9 +32,9 @@ class AppointmentManager(QDialog):
         past_appointments_button.clicked.connect(self.view_past_appointments)
         layout.addWidget(past_appointments_button)
 
-        view_bills_button = QPushButton("View Bills")
-        view_bills_button.clicked.connect(self.view_bills)
-        layout.addWidget(view_bills_button)
+        #view_bills_button = QPushButton("View Bills")
+        #view_bills_button.clicked.connect(self.view_bills)
+        #layout.addWidget(view_bills_button)
 
         self.back_button = QPushButton("Back to Home Page")
         layout.addWidget(self.back_button)

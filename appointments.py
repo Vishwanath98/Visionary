@@ -1,7 +1,7 @@
 import mysql
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import QDateTime
-from PyQt5.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QWidget
+from PyQt5.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QWidget, QMessageBox
 
 from DATA225utils import make_connection
 
@@ -11,6 +11,8 @@ class Appointment(QDialog):
         uic.loadUi("patient_appointments.ui", self)
         #for search button
         self.search_button.clicked.connect(self.update_doctor_list)
+        #for book appointment
+        self.book_appointment.clicked.connect(self.show_book_appointment)
         #for date
         self.date_time.setDateTime(QDateTime.currentDateTime())
         #for specialization
@@ -44,54 +46,53 @@ class Appointment(QDialog):
         # Create a combo box and populate it with consultation fees
         self.fee_cb.addItem("All")
         self.fee_cb.addItems(map(str, consultation_fees))
-    def add_doctor_buttons(self):
-        for doctor in self.get_filtered_doctors("All", "All", QDateTime.currentDateTime()):
-            button_layout = QHBoxLayout()
 
-            # Add doctor name to the layout
-            doctor_label = QLabel(doctor)
-            #rating_label = QLabel(rating)
-            button_layout.addWidget(doctor_label)
+    def show_book_appointment(self):
+        selected_item = self.doctors_list.currentItem()
+        if selected_item:
+            appointment_text = selected_item.text()
 
-            # Add "Book Appointment" button
-            book_appointment_button = QPushButton("Book Appointment")
-            book_appointment_button.clicked.connect(lambda _, doc=doctor: self.book_appointment(doc))
-            button_layout.addWidget(book_appointment_button)
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Question)
+            msg_box.setText(f"Do you want to book the appointment:\n{appointment_text}")
+            msg_box.setWindowTitle("Appointment Confirmation")
 
-            # Add the layout to the list widget
-            item_widget = QWidget()
-            item_widget.setLayout(button_layout)
-            list_item = self.doctor_list.addItem("")
-            self.doctors_list.setItemWidget(list_item, item_widget)
+            accept_button = msg_box.addButton("Book", QMessageBox.AcceptRole)
+            #decline_button = msg_box.addButton("Decline", QMessageBox.RejectRole)
 
-    def book_appointment(self, doctor_name):
-        # Add your logic here for booking an appointment with the selected doctor
-        #create appointment Id function to create appointment id's for every new appointment ID
-        #insert into appointments with
-        print(f"Booking appointment with {doctor_name}")
+            msg_box.exec_()
+
+            if msg_box.clickedButton() == accept_button:
+                #print(f"Booked appointment: {appointment_text}")
+                self.show_notification("Appointment Booked", "Wait for the doctor's confirmation")
+            #elif msg_box.clickedButton() == decline_button:
+                #print(f"Declined appointment: {appointment_text}")
     def get_filtered_doctors(self, disease, cost, selected_date):
         try:
             connection = make_connection(config_file='hosp.ini')
             cursor = connection.cursor()
 
             #rating specialization, fee
-            query = ("SELECT Doctor.Doctor_ID, Doctor.Doctor_Name, Doctor.Specialization, Billing.Consultation_Fee FROM Doctor JOIN Billing ON Doctor.Doctor_ID = Billing.Doctor_ID")
+            query = ("SELECT D.Doctor_ID, D.Doctor_Name, D.Specialization, C.Consultation_Fee FROM Doctor D JOIN Consultation C ON D.Consultation_ID = C.Consultation_ID")
             conditions = []
 
             if disease != "All":
-                conditions.append(f"Specialization = '{disease}'")
+                conditions.append(f" WHERE Specialization = '{disease}'")
 
             if cost != "All":
-                conditions.append(f"Consultation_Fee = '{cost}'")
+                conditions.append(f" WHERE Consultation_Fee = '{cost}'")
 
             #conditions.append(f"available_date = '{selected_date.toString('yyyy-MM-dd')}'")
 
             query += " AND ".join(conditions)
-
+            #print(query)
             cursor.execute(query)
-            doctors = [doctor[0] for doctor in cursor.fetchall()]
-
-            return doctors
+            rows = cursor.fetchall()
+            #print(rows)
+            #cursor.execute(query)
+            #doctors = [doctor for doctor in rows]
+            #print("doctors list: ",doctors)
+            return rows
 
         except mysql.connector.Error as err:
             print(f"Error: {err}")
@@ -106,12 +107,18 @@ class Appointment(QDialog):
         selected_disease = self.specialisation_cb.currentText()
         selected_cost = self.fee_cb.currentText()
         selected_date = self.date_time.dateTime()
-        print(selected_disease,selected_cost,selected_date)
+        #print(selected_disease,selected_cost,selected_date)
         # Clear the current items in the list widget
         self.doctors_list.clear()
 
         # Update the list widget based on the filters
         doctors_to_display = self.get_filtered_doctors(selected_disease, selected_cost, selected_date)
-
+        #print(doctors_to_display)
         # Add the filtered doctors to the list widget
-        self.doctors_list.addItems(doctors_to_display)
+        for d in doctors_to_display:
+            doctor_str = f"Doctor ID: {d[0]}, Name: {d[1]}, Specialization: {d[2]}, Fee: {d[3]}"
+            #print(doctor_str)
+            self.doctors_list.addItem(f"{doctor_str}")
+
+    def show_notification(self, title, message):
+        QMessageBox.information(self, title, message, QMessageBox.Ok)

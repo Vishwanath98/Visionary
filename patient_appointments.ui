@@ -133,7 +133,20 @@
     <string>Search</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="back_button">
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>810</y>
+     <width>1091</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Back to Home</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="book_appointment">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -143,7 +156,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Back to Home</string>
+    <string>Book Appointment</string>
    </property>
   </widget>
  </widget>
