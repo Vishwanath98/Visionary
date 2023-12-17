@@ -1,8 +1,45 @@
 import sys
 import mysql.connector
+from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QListWidget, QPushButton, QDialog, QFormLayout, QLineEdit
 from DATA225utils import make_connection
+from edit_mange import Edit_Manage
 
+
+class AppointmentManager(QDialog):
+    def __init__(self, parent=None):
+        super(AppointmentManager, self).__init__(parent)
+        uic.loadUi("manage_appointments.ui", self)
+        self.edit_button.clicked.connect(self.edit_appointment)
+        sample_appointments = [
+            "John Doe - Cardiology - 2023-06-15 10:30 AM",
+            "Jane Smith - Orthopedics - 2023-06-20 02:00 PM",
+            "Bob Johnson - Pediatrics - 2023-06-25 11:45 AM",
+        ]
+        self.booked_list.addItems(sample_appointments)
+    def edit_appointment(self):
+            selected_item = self.booked_list.currentItem()
+            if selected_item:
+                appointment_info = selected_item.text()
+                edit_dialog = Edit_Manage(self)
+                edit_dialog.setAppointmentInfo(appointment_info)
+                edit_dialog.accepted.connect(self.handle_edit_accept)
+
+                if edit_dialog.exec_() == QDialog.Accepted:
+                    # The edited information will be handled in the handle_edit_accept method
+                    pass
+
+    def handle_edit_accept(self):
+        # Retrieve the edited information from the EditDialog
+        edited_info = self.sender().getEditedInfo()
+
+        # Update the QListWidget item text
+        selected_item = self.booked_list.currentItem()
+        if selected_item:
+            selected_item.setText(edited_info)
+
+
+"""
 class AppointmentManager(QDialog):
     def __init__(self):
         super(AppointmentManager, self).__init__()
@@ -112,4 +149,5 @@ class AppointmentManager(QDialog):
         msg_layout.addWidget(QLabel(message))
         msg_dialog.setLayout(msg_layout)
         msg_dialog.exec_()
+"""
 

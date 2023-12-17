@@ -47,5 +47,26 @@ class RegistrationWindow(QDialog):
                 print("end")
                 self.show_notification("Registration Successful", "Successfully registered! Now you can log in.")
 
+                #generating new patient ID upon registering
+                connection = make_connection(config_file='hosp.ini')
+                cursor = connection.cursor()
+
+                # Find the maximum numeric part for all patient IDs
+                cursor.execute("SELECT MAX(CAST(SUBSTRING(patient_id FROM LENGTH('VH') + 1) AS UNSIGNED)) "
+                               "FROM Patient WHERE Patient_ID LIKE 'VH%'")
+                result = cursor.fetchone()
+                #print(result)
+                last_numeric_part = result[0] if result[0] is not None else 0
+
+                # Increment the last numeric part and generate the new patient ID
+                last_numeric_part += 1
+                new_patient_id = f'VH{last_numeric_part}'
+                print(new_patient_id)
+
+                # Insert the new patient into the patient table
+                cursor.execute(
+                    "INSERT INTO Patient (Patient_ID, Patient_Name, Gender) VALUES (%s, %s, %s)",
+                    (new_patient_id, first_name, gender))
+
     def show_notification(self, title, message):
         QMessageBox.information(self, title, message, QMessageBox.Ok)

@@ -58,13 +58,61 @@ class Appointment(QDialog):
             msg_box.setWindowTitle("Appointment Confirmation")
 
             accept_button = msg_box.addButton("Book", QMessageBox.AcceptRole)
-            #decline_button = msg_box.addButton("Decline", QMessageBox.RejectRole)
-
             msg_box.exec_()
+
+            #extracting the info to insert into the tables
+            Doctor_ID = self.extract_info(appointment_text, "DoctorID")
+            Health_Issue = self.extract_info(appointment_text, "Specialization")
+            Consultation_Fee = self.extract_info(appointment_text, "Fee")
+            doctor_name = self.extract_info(appointment_text, "Name")
+            #print(Doctor_ID,Health_Issue,Consultation_Fee,doctor_name)
 
             if msg_box.clickedButton() == accept_button:
                 #print(f"Booked appointment: {appointment_text}")
                 self.show_notification("Appointment Booked", "Wait for the doctor's confirmation")
+
+                #SQL QUERY for creating the Patient Id and inserting into consulting table
+                #def register_and_book_appointment(appointment_info):
+                    # Connect to the MySQL database
+                try:
+                        # Create a MySQL cursor
+                    connection = make_connection(config_file='hosp.ini')
+                    cursor = connection.cursor()
+
+                        # Find the maximum numeric part for all patient IDs
+                    cursor.execute("SELECT MAX(CAST(SUBSTRING(Consultation_ID FROM LENGTH('CONS') + 1) AS UNSIGNED)) "
+                                       "FROM Consultation WHERE Consultation_ID LIKE 'CONS%'")
+                    result = cursor.fetchone()
+                    last_numeric_part = result[0] if result[0] is not None else 0
+
+                        # Increment the last numeric part and generate the new patient ID
+                    last_numeric_part += 1
+                    consultation_id = f'CONS{last_numeric_part}'
+                    print(consultation_id)
+
+                        # Insert the new patient into the patient table
+                    cursor.execute("INSERT INTO Consultation (Consultation_ID, Doctor_ID, Health_Issue, Consultation_Fee, Appointment_Status) VALUES (%s, %s, %s, %s, %s)",
+                                       (consultation_id, Doctor_ID, Health_Issue, Consultation_Fee, 'Pending'))
+                    """
+                    # Insert the appointment information into the appointments table
+                    cursor.execute(
+                            "INSERT INTO your_appointments_table (patient_id, appointment_info, other_columns) VALUES (%s, %s, %s)",
+                            (new_patient_id, appointment_info, '...'))
+                    """
+                    # Commit the changes
+                    connection.commit()
+
+                        # Optionally, you can return the new patient ID or any other information
+                        # return new_patient_id
+
+                except mysql.connector.Error as err:
+                    print(f"Error: {err}")
+
+                finally:
+                        # Close the cursor and connection
+                    cursor.close()
+                    connection.close()
+
             #elif msg_box.clickedButton() == decline_button:
                 #print(f"Declined appointment: {appointment_text}")
     def get_filtered_doctors(self, disease, cost, selected_date):
@@ -119,6 +167,16 @@ class Appointment(QDialog):
             doctor_str = f"Doctor ID: {d[0]}, Name: {d[1]}, Specialization: {d[2]}, Fee: {d[3]}"
             #print(doctor_str)
             self.doctors_list.addItem(f"{doctor_str}")
+
+    def extract_info(self, text, key):
+        # Helper function to extract information from the text based on the key
+        start_index = text.find(f"{key}: ") + len(f"{key}: ")
+        end_index = text.find(",", start_index)
+        extracted_info = text[start_index:end_index].strip()
+
+        # Remove the colon if present
+        extracted_info = extracted_info.replace(':', '').strip()
+        return extracted_info
 
     def show_notification(self, title, message):
         QMessageBox.information(self, title, message, QMessageBox.Ok)
